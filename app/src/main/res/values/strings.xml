@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Diario de Classe (Tarde)</string>
+    <string name="login">Login</string>
+    <string name="senha">Senha</string>
+    <string name="nome">Nome</string>
+    <string name="confirmarSenha">Confirmar Senha</string>
+</resources>
