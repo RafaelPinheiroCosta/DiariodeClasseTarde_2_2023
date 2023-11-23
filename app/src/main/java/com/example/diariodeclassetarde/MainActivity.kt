@@ -39,6 +39,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.diariodeclassetarde.ui.TelaLogin.TelaLogin
 import com.example.diariodeclassetarde.ui.theme.DiarioDeClasseTardeTheme
 import kotlin.math.log
 
@@ -57,11 +61,8 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun AppDiarioDeClasse() {
-    var nome by remember { mutableStateOf("") }
-    var login by remember { mutableStateOf("") }
-    var senha by remember { mutableStateOf("") }
-    var confirmarSenha by remember { mutableStateOf("") }
-    var cadastrar by remember { mutableStateOf(false) }
+
+    val controleNavegacao = rememberNavController()
 
     Scaffold(
         topBar = {
@@ -73,105 +74,31 @@ fun AppDiarioDeClasse() {
                     Text(
                         text = "Diario de Classe"
                     )
-                },navigationIcon = {
-                    if(cadastrar) {
-                        IconButton(
-                            onClick = { cadastrar = !cadastrar }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = null
-                            )
-                        }
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = { }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = null
+                        )
                     }
                 },
             )
         }
 
-    ) {
-        espacoDasBarras ->
+    ) { espacoDasBarras ->
 
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(espacoDasBarras)
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(15.dp),
-                modifier = Modifier
-                    .animateContentSize(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioNoBouncy,
-                            stiffness = Spring.StiffnessVeryLow
-                        )
-                    )
-            ) {
-                if (cadastrar) {
-                    CampoDeTexto(
-                        value = nome,
-                        onValueChange = { nome = it },
-                        idtexto = R.string.nome
-                    )
-                }
-                CampoDeTexto(
-                    value = login,
-                    onValueChange = { login = it },
-                    idtexto = R.string.login
-                )
-                CampoDeTexto(
-                    value = senha,
-                    onValueChange = { senha = it },
-                    idtexto = R.string.senha
-                )
-                if (cadastrar) {
-                    CampoDeTexto(
-                        value = confirmarSenha,
-                        onValueChange = { confirmarSenha = it },
-                        idtexto = R.string.confirmarSenha
-                    )
-                }
-            }
-            if (!cadastrar) {
-                Text(
-                    text = "Cadastrar",
-                    modifier = Modifier.clickable {
-                        cadastrar = true
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.size(10.dp))
-            Button(
-                onClick = {
-                    cadastrar = false
-                }
-            ) {
-                Text(
-                    text = if (cadastrar)
-                        "Cadastrar"
-                    else
-                        "Entrar"
-                )
+        NavHost(
+            navController = controleNavegacao,
+            startDestination  ="TelaLogin"
+        ){
+            composable(
+                route = "TelaLogin"
+            ){
+                TelaLogin(espacoDasBarras = espacoDasBarras)
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CampoDeTexto(
-    value: String,
-    onValueChange: (String) -> Unit,
-    idtexto: Int
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
-            Text(
-                text = stringResource(idtexto)
-            )
-        }
-    )
 }
